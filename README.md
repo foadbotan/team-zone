@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Team Zone
 
-## Getting Started
+Team Zone is a useful tool for managing time zone differences in remote teams. It simplifies scheduling meetings, tracking deadlines and enhances communication efficiency. Eliminate time zone confusion and improve productivity with Team Zone.
 
-First, run the development server:
+## Components
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. A list of team members
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   - The list will be offset list by time zone and color coded (like a Gantt chart)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. A range slider to select a time range
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   - The time for each team member will be highlighted in the list
 
-## Learn More
+3. A form to input other info about the meeting
 
-To learn more about Next.js, take a look at the following resources:
+## State
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+UI state will be stored in the URL. This will allow users to share a link to a specific view timezone view without signing up.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Data
 
-## Deploy on Vercel
+I might fetch time zone data from WorldTimeAPI. I will also need to store the user's data in a database.
+I'll use the Luxon or Date-fns to interact with the dates and times.
+Supabase will be used for the database.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- `/` - Home page
+- `/login` - Login page
+- `/signup` - Signup page
+- `/teams` - Dashboard page
+- `/teams/:id` - Dashboard page for a specific team
+- `/teams/:id/meetings` - Meeting page for all meetings for a specific team
+- `/teams/:id/meetings/:id` - Meeting page for a specific meeting for a specific team
+- `/users/:id` - User profile page
