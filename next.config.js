@@ -1,4 +1,9 @@
+// images from images.unsplash.com
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  images: {
+    domains: ['api.dicebear.com'],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
