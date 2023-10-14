@@ -20,20 +20,25 @@ const timeZones = [
   },
 ];
 
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
+const MINUTES_IN_DAY = MINUTES_IN_HOUR * HOURS_IN_DAY;
+
 const avatarURL = (seed: string): string =>
   `https://api.dicebear.com/7.x/lorelei/svg?seed=${seed}`;
 
 const formatTime = (time: number): string => {
-  const hours = Math.floor(time / 4);
-  const minutes = (time % 4) * 15;
-  const ampm = hours < 12 ? 'AM' : 'PM';
-  const formattedHours = hours % 12 || 12;
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  const hours = Math.floor(time / MINUTES_IN_HOUR);
+  const minutes = time % MINUTES_IN_HOUR;
+
+  const hoursString = String(hours).padStart(2, '0');
+  const minutesString = String(minutes).padStart(2, '0');
+
+  return `${hoursString}:${minutesString}`;
 };
 
 export default function TimeZonesList() {
-  const [selectedTime, setSelectedTime] = useState((24 * 4) / 2);
+  const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
 
   return (
     <div className="relative py-6">
@@ -42,14 +47,15 @@ export default function TimeZonesList() {
         type="range"
         className="absolute inset-0 z-20 bg-transparent appearance-none cursor-pointer "
         min={0}
-        max={24 * 4}
+        max={MINUTES_IN_DAY}
+        step={15}
         value={selectedTime}
         onChange={(event) => setSelectedTime(Number(event.target.value))}
       />
       <div
         className="absolute top-0 bottom-0 z-10 w-1 bg-red-500"
         style={{
-          left: `${(selectedTime / (24 * 4)) * 100}%`,
+          left: `${(selectedTime / MINUTES_IN_DAY) * 100}%`,
         }}
       />
       <ul>
