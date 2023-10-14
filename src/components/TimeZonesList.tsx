@@ -45,7 +45,7 @@ export default function TimeZonesList() {
       <p className="text-xl">{formatTime(selectedTime)}</p>
       <input
         type="range"
-        className="absolute inset-0 z-20 bg-transparent appearance-none cursor-pointer "
+        className="absolute inset-0 z-20 bg-transparent appearance-none cursor-pointer h-full w-full"
         min={0}
         max={MINUTES_IN_DAY}
         step={15}
