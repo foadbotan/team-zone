@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { log, time } from 'console';
 import { useState } from 'react';
 
 type TimeZone = {
