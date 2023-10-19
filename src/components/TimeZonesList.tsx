@@ -2,34 +2,27 @@
 
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { DateTime } from 'luxon';
 
-type TimeZone = {
+type Person = {
   name: string;
-  offset: number;
-  people: string[];
+  timeZone: string;
 };
 
-const timeZones: TimeZone[] = [
-  {
-    name: 'London',
-    offset: 1,
-    people: ['Joey', 'Rachel'],
-  },
-  {
-    name: 'Los Angeles',
-    offset: -7,
-    people: ['Monica'],
-  },
-  {
-    name: 'Sydney',
-    offset: 10,
-    people: ['Chandler', 'Ross'],
-  },
-  {
-    name: 'Tokyo',
-    offset: -4,
-    people: ['Gunther', 'Janice'],
-  },
+type TimeZone = {
+  timeZone: string;
+  people: Person[];
+};
+
+const people: Person[] = [
+  { name: 'Joey', timeZone: 'Europe/London' },
+  { name: 'Rachel', timeZone: 'Europe/London' },
+  { name: 'Monica', timeZone: 'America/Los_Angeles' },
+  { name: 'Chandler', timeZone: 'Australia/Sydney' },
+  { name: 'Ross', timeZone: 'Australia/Sydney' },
+  { name: 'Gunther', timeZone: 'Asia/Tokyo' },
+  { name: 'Janice', timeZone: 'Asia/Tokyo' },
+  { name: 'Phoebe', timeZone: 'Asia/Bangkok' },
 ];
 
 const MINUTES_IN_HOUR = 60;
@@ -50,23 +43,43 @@ function formatTime(time: number): string {
   return `${hoursString}:${minutesString}`;
 }
 
-function inWorkingHours(eventTime: number, timeZone: TimeZone): boolean {
-  const workStart = getWorkStart(timeZone);
-  const workEnd = getWorkEnd(timeZone);
+function inWorkingHours(eventTime: number, offset: number): boolean {
+  const workStart = getWorkStart(offset);
+  const workEnd = getWorkEnd(offset);
 
   return eventTime >= workStart && eventTime <= workEnd;
 }
 
-function getWorkStart(timeZone: TimeZone): number {
-  return timeZone.offset * MINUTES_IN_HOUR;
+function getWorkStart(offset: number): number {
+  return offset;
 }
 
-function getWorkEnd(timeZone: TimeZone): number {
-  return MINUTES_IN_HOUR * 12 + getWorkStart(timeZone);
+function getWorkEnd(offset: number): number {
+  return MINUTES_IN_HOUR * 12 + getWorkStart(offset);
+}
+
+function getOffset(timeZone: string): number {
+  return DateTime.fromObject({}, { zone: timeZone }).offset;
+}
+
+function groupByTimeZone(people: Person[]): TimeZone[] {
+  const timeZonesTable = people.reduce((timeZones, person) => {
+    timeZones[person.timeZone] = timeZones[person.timeZone] || [];
+    timeZones[person.timeZone].push(person);
+    return timeZones;
+  }, {} as Record<string, Person[]>);
+
+  return Object.entries(timeZonesTable).map(([timeZone, people]) => ({
+    timeZone,
+    people,
+  }));
 }
 
 export default function TimeZonesList() {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
+
+  const timeZones = groupByTimeZone(people);
+  console.log(timeZones);
 
   return (
     <>
@@ -88,41 +101,42 @@ export default function TimeZonesList() {
           }}
         />
         <ul className="border rounded-xl p-4 pb-10 shadow-lg my-6 space-y-6">
-          {timeZones.map((timeZone) => {
-            let workStart = getWorkStart(timeZone);
-            let workEnd = getWorkEnd(timeZone);
+          {timeZones.map(({ timeZone, people }) => {
+            const offset = getOffset(timeZone);
+            let workStart = getWorkStart(offset);
+            let workEnd = getWorkEnd(offset);
             workStart = workStart < 0 ? 0 : workStart;
             workEnd = workEnd > MINUTES_IN_DAY ? MINUTES_IN_DAY : workEnd;
             return (
-              <li key={timeZone.name}>
+              <li key={timeZone}>
                 <div className="flex items-end justify-between pb-2">
                   <div className="">
                     <p className="text-sm font-semibold leading-6 text-neutral-900">
-                      {timeZone.name}
+                      {timeZone}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-neutral-500">
-                      {`UTC ${timeZone.offset < 0 ? '' : '+'}${timeZone.offset}`}
+                      {`UTC ${offset < 0 ? '' : '+'}${offset / MINUTES_IN_HOUR}`}
                     </p>
                   </div>
                   <div
                     className={cn('flex gap-2', {
-                      '[&_img]:bg-green-500': inWorkingHours(selectedTime, timeZone),
+                      '[&_img]:bg-green-500': inWorkingHours(selectedTime, offset),
                     })}
                   >
-                    {timeZone.people.map((person) => (
-                      <div key={person} className="flex flex-col items-center ">
+                    {people.map(({ name }) => (
+                      <div key={name} className="flex flex-col items-center ">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           className={cn(
                             'inline-block w-12 h-12 rounded-full bg-neutral-200'
                           )}
-                          src={avatarURL(person)}
-                          alt={person}
+                          src={avatarURL(name)}
+                          alt={name}
                           width="48"
                           height="48"
                         />
                         <span className="max-w-[12ch] text-xs truncate text-neutral-600">
-                          {person}
+                          {name}
                         </span>
                       </div>
                     ))}
@@ -143,7 +157,7 @@ export default function TimeZonesList() {
                         className={cn('h-6', {
                           'bg-blue-400': isWorkTime,
                           'bg-blue-500':
-                            isWorkTime && inWorkingHours(selectedTime, timeZone),
+                            isWorkTime && inWorkingHours(selectedTime, offset),
                         })}
                       ></div>
                     );
