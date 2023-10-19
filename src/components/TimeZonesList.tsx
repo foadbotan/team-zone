@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { DateTime } from 'luxon';
+import { name } from 'assert';
 
 type Person = {
   name: string;
@@ -14,7 +15,7 @@ type TimeZone = {
   people: Person[];
 };
 
-const people: Person[] = [
+const initialPeople: Person[] = [
   { name: 'Joey', timeZone: 'Europe/London' },
   { name: 'Rachel', timeZone: 'Europe/London' },
   { name: 'Monica', timeZone: 'America/Los_Angeles' },
@@ -77,13 +78,28 @@ function groupByTimeZone(people: Person[]): TimeZone[] {
 
 export default function TimeZonesList() {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
+  const [people, setPeople] = useState(initialPeople);
 
-  const timeZones = groupByTimeZone(people);
-  console.log(timeZones);
+  const timeZones = groupByTimeZone(people).toSorted(
+    (a, b) => getOffset(a.timeZone) - getOffset(b.timeZone)
+  );
+
+  function addPerson(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const { name, timeZone } = event.target as HTMLFormElement;
+    const person = {
+      name: name.value,
+      timeZone: timeZone.value,
+    };
+
+    setPeople([...people, person]);
+  }
 
   return (
     <>
       <p className="text-xl">{formatTime(selectedTime)}</p>
+
       <div className="relative">
         <input
           type="range"
@@ -107,6 +123,7 @@ export default function TimeZonesList() {
             let workEnd = getWorkEnd(offset);
             workStart = workStart < 0 ? 0 : workStart;
             workEnd = workEnd > MINUTES_IN_DAY ? MINUTES_IN_DAY : workEnd;
+
             return (
               <li key={timeZone}>
                 <div className="flex items-end justify-between pb-2">
@@ -123,23 +140,25 @@ export default function TimeZonesList() {
                       '[&_img]:bg-green-500': inWorkingHours(selectedTime, offset),
                     })}
                   >
-                    {people.map(({ name }) => (
-                      <div key={name} className="flex flex-col items-center ">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          className={cn(
-                            'inline-block w-12 h-12 rounded-full bg-neutral-200'
-                          )}
-                          src={avatarURL(name)}
-                          alt={name}
-                          width="48"
-                          height="48"
-                        />
-                        <span className="max-w-[12ch] text-xs truncate text-neutral-600">
-                          {name}
-                        </span>
-                      </div>
-                    ))}
+                    {people
+                      .filter(({ name }) => name)
+                      .map(({ name }) => (
+                        <div key={name} className="flex flex-col items-center ">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            className={cn(
+                              'inline-block w-12 h-12 rounded-full bg-neutral-200'
+                            )}
+                            src={avatarURL(name)}
+                            alt={name}
+                            width="48"
+                            height="48"
+                          />
+                          <span className="max-w-[12ch] text-xs truncate text-neutral-600">
+                            {name}
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 </div>
                 <div
@@ -168,6 +187,38 @@ export default function TimeZonesList() {
           })}
         </ul>
       </div>
+      <form onSubmit={addPerson} className="mt-20 space-y-4">
+        <h3 className="text-xl font-medium text-gray-900">Add a team member</h3>
+        <div className="flex items-end gap-2">
+          <div className="flex flex-col gap-1 flex-1">
+            <label htmlFor="name" className="mb-2">
+              Name
+            </label>
+            <input
+              id="name"
+              className="px-4 py-2 border rounded-md shadow-sm focus:ring-neutral-500 focus:border-neutral-500 sm:text-sm"
+              placeholder="Name"
+            />
+          </div>
+          <div className="flex flex-col flex-1">
+            <label htmlFor="timeZone">Time Zone</label>
+            <select
+              id="timeZone"
+              className="px-4 py-2 border rounded-md shadow-sm focus:ring-neutral-500 focus:border-neutral-500 sm:text-sm"
+            >
+              {Intl.supportedValuesOf('timeZone').map((timeZone) => (
+                <option key={timeZone}>{timeZone}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-500 border border-transparent rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Add
+          </button>
+        </div>
+      </form>
     </>
   );
 }
