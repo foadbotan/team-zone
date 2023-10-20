@@ -3,7 +3,6 @@
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { DateTime } from 'luxon';
-import { name } from 'assert';
 
 type Person = {
   name: string;
@@ -13,6 +12,7 @@ type Person = {
 type TimeZone = {
   timeZone: string;
   people: Person[];
+  offset: number;
 };
 
 const initialPeople: Person[] = [
@@ -45,18 +45,14 @@ function formatTime(time: number): string {
 }
 
 function inWorkingHours(eventTime: number, offset: number): boolean {
-  const workStart = getWorkStart(offset);
+  const workStart = offset;
   const workEnd = getWorkEnd(offset);
 
   return eventTime >= workStart && eventTime <= workEnd;
 }
 
-function getWorkStart(offset: number): number {
-  return offset;
-}
-
 function getWorkEnd(offset: number): number {
-  return MINUTES_IN_HOUR * 12 + getWorkStart(offset);
+  return MINUTES_IN_HOUR * 12 + offset;
 }
 
 function getOffset(timeZone: string): number {
@@ -70,30 +66,34 @@ function groupByTimeZone(people: Person[]): TimeZone[] {
     return timeZones;
   }, {} as Record<string, Person[]>);
 
-  return Object.entries(timeZonesTable).map(([timeZone, people]) => ({
-    timeZone,
-    people,
-  }));
+  return Object.entries(timeZonesTable)
+    .map(([timeZone, people]: [string, Person[]]) => ({
+      timeZone,
+      people,
+      offset: getOffset(timeZone),
+    }))
+    .sort((a, b) => a.offset - b.offset);
 }
 
 export default function TimeZonesList() {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
   const [people, setPeople] = useState(initialPeople);
 
-  const timeZones = groupByTimeZone(people).toSorted(
-    (a, b) => getOffset(a.timeZone) - getOffset(b.timeZone)
-  );
+  const timeZones: TimeZone[] = groupByTimeZone(people);
 
   function addPerson(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const { name, timeZone } = event.target as HTMLFormElement;
-    const person = {
-      name: name.value,
-      timeZone: timeZone.value,
-    };
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const timeZone = formData.get('timeZone');
+    const person: Person = { name: String(name), timeZone: String(timeZone) };
+
+    if (!timeZone) return;
 
     setPeople([...people, person]);
+    form.reset();
   }
 
   return (
@@ -119,9 +119,8 @@ export default function TimeZonesList() {
         <ul className="border rounded-xl p-4 pb-10 shadow-lg my-6 space-y-6">
           {timeZones.map(({ timeZone, people }) => {
             const offset = getOffset(timeZone);
-            let workStart = getWorkStart(offset);
             let workEnd = getWorkEnd(offset);
-            workStart = workStart < 0 ? 0 : workStart;
+            let workStart = offset < 0 ? 0 : offset;
             workEnd = workEnd > MINUTES_IN_DAY ? MINUTES_IN_DAY : workEnd;
 
             return (
@@ -196,6 +195,7 @@ export default function TimeZonesList() {
             </label>
             <input
               id="name"
+              name="name"
               className="px-4 py-2 border rounded-md shadow-sm focus:ring-neutral-500 focus:border-neutral-500 sm:text-sm"
               placeholder="Name"
             />
@@ -204,6 +204,7 @@ export default function TimeZonesList() {
             <label htmlFor="timeZone">Time Zone</label>
             <select
               id="timeZone"
+              name="timeZone"
               className="px-4 py-2 border rounded-md shadow-sm focus:ring-neutral-500 focus:border-neutral-500 sm:text-sm"
             >
               {Intl.supportedValuesOf('timeZone').map((timeZone) => (
