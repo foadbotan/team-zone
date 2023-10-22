@@ -1,0 +1,21 @@
+const MINUTES_IN_HOUR = 60; // 60 minutes
+const HOURS_IN_DAY = 24; // 24 hours
+const MINUTES_IN_DAY = MINUTES_IN_HOUR * HOURS_IN_DAY; // 1440 minutes
+const QUARTER_HOUR = MINUTES_IN_HOUR / 4; // 15 minutes
+const QUARTER_HOURS_IN_DAY = MINUTES_IN_DAY / QUARTER_HOUR; // 96 quarter hours
+const WORKING_HOURS_START = 9; // 9:00
+const WORKING_HOURS_END = 17; // 17:00
+const WORK_START = WORKING_HOURS_START * MINUTES_IN_HOUR; // 540 minutes
+const WORK_END = WORKING_HOURS_END * MINUTES_IN_HOUR; // 1020 minutes
+const TIME_ZONES = Intl.supportedValuesOf('timeZone');
+
+export {
+  MINUTES_IN_HOUR,
+  HOURS_IN_DAY,
+  MINUTES_IN_DAY,
+  QUARTER_HOUR,
+  QUARTER_HOURS_IN_DAY,
+  WORK_START,
+  WORK_END,
+  TIME_ZONES,
+};
