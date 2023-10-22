@@ -35,7 +35,7 @@ export default function Avatar({
           height="48"
         />
       </div>
-      <span className="max-w-[12ch] text-sm truncate text-neutral-600">
+      <span className="max-w-[12ch] text-sm truncate text-neutral-600 capitalize">
         {person.name}
       </span>
       {children}

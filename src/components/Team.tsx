@@ -1,6 +1,6 @@
 import { Person } from '@/types';
 import Avatar from './Avatar';
-import NewPersonForm from './NewPersonForm';
+import AddPersonForm from './AddPersonForm';
 import { cn } from '@/lib/utils';
 import { CheckIcon, PlusIcon, Trash2Icon, XIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -10,21 +10,39 @@ type Props = {
   setPeople: (people: Person[]) => void;
 };
 
-export default function Team({ people, setPeople }: Props) {
-  const [editing, setEditing] = useState(false);
+type EditingMode = 'adding' | 'deleting' | null;
 
-  const toggleEditing = () => setEditing((prev) => !prev);
-  const toggleSelect = (person: Person) => {
+export default function Team({ people, setPeople }: Props) {
+  const [editMode, setEditMode] = useState<EditingMode>(null);
+
+  const isDeleting = editMode === 'deleting';
+  const isAdding = editMode === 'adding';
+
+  function toggleDeleting() {
+    if (editMode === 'deleting') {
+      setEditMode(null);
+    } else if (editMode === null) {
+      setEditMode('deleting');
+    }
+  }
+  function toggleAdding() {
+    if (editMode === 'adding') {
+      setEditMode(null);
+    } else if (editMode === null) {
+      setEditMode('adding');
+    }
+  }
+
+  function toggleSelect(person: Person) {
     const selectedPerson = people.find((p) => p.name === person.name);
     if (!selectedPerson) return;
-
     selectedPerson.isSelected = !selectedPerson.isSelected;
     setPeople([...people]);
-  };
+  }
 
-  const deletePerson = (person: Person) => {
+  function deletePerson(person: Person) {
     setPeople(people.filter((p) => p.name !== person.name));
-  };
+  }
 
   return (
     <section className="mt-20 space-y-6">
@@ -38,13 +56,13 @@ export default function Team({ people, setPeople }: Props) {
             person={person}
             asListItem
             className={cn(
-              'hover:bg-neutral-400 cursor-pointer opacity-20',
+              'cursor-pointer opacity-20 hover:bg-neutral-400 ',
               person.isSelected && 'opacity-100',
-              editing && 'opacity-100 hover:bg-neutral-200 cursor-default'
+              isDeleting && 'opacity-100 hover:bg-neutral-200 cursor-default'
             )}
-            onClick={() => !editing && toggleSelect(person)}
+            onClick={() => !isDeleting && toggleSelect(person)}
           >
-            {editing && (
+            {isDeleting && (
               <XIcon
                 className="absolute -top-2 -right-2  w-6 h-6  bg-red-500 cursor-pointer text-white rounded-full p-1 hover:bg-red-600"
                 onClick={() => deletePerson(person)}
@@ -52,24 +70,36 @@ export default function Team({ people, setPeople }: Props) {
             )}
           </Avatar>
         ))}
-        <li className="flex items-center justify-center w-12 h-12 bg-neutral-200 rounded-full cursor-pointer hover:bg-neutral-300 text-neutral-500">
-          <PlusIcon className="w-6 h-6" />
+        <li
+          className={cn(
+            'flex items-center justify-center w-12 h-12 text-neutral-500 bg-neutral-200 rounded-full cursor-pointer hover:bg-neutral-300',
+            isAdding && 'bg-green-500 text-white hover:bg-green-600'
+          )}
+          onClick={toggleAdding}
+        >
+          {isAdding ? (
+            <CheckIcon className="w-6 h-6" />
+          ) : (
+            <PlusIcon className="w-6 h-6" />
+          )}
         </li>
         <li
           className={cn(
             'flex items-center justify-center w-12 h-12 text-neutral-500 bg-neutral-200 rounded-full cursor-pointer hover:bg-neutral-300',
-            editing && 'bg-green-500 text-white hover:bg-green-600'
+            isDeleting && 'bg-green-500 text-white hover:bg-green-600'
           )}
-          onClick={toggleEditing}
+          onClick={toggleDeleting}
         >
-          {editing ? (
+          {isDeleting ? (
             <CheckIcon className="w-6 h-6" />
           ) : (
             <Trash2Icon className="w-6 h-6" />
           )}
         </li>
       </ul>
-      <NewPersonForm addPerson={(person: Person) => setPeople([...people, person])} />
+      {isAdding && (
+        <AddPersonForm addPerson={(person: Person) => setPeople([...people, person])} />
+      )}
     </section>
   );
 }
