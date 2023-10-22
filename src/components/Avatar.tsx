@@ -22,7 +22,7 @@ export default function Avatar({
   const Container = asListItem ? 'li' : 'div';
 
   return (
-    <Container className="flex flex-col items-center gap-1 relative" onClick={onClick}>
+    <Container className="flex flex-col items-center  relative" onClick={onClick}>
       <div
         className={cn('w-12 h-12 rounded-full bg-neutral-200 overflow-hidden', className)}
       >
@@ -35,7 +35,7 @@ export default function Avatar({
           height="48"
         />
       </div>
-      <span className="max-w-[12ch] text-sm truncate text-neutral-600 capitalize">
+      <span className="max-w-[12ch] truncate capitalize text-sm leading-6 text-neutral-900">
         {person.name}
       </span>
       {children}

@@ -6,6 +6,12 @@ export type Person = {
 
 export type TimeZone = {
   timeZone: string;
-  people: Person[];
+  region: string;
+  city: string;
   offset: number;
+  formattedOffset: string;
+};
+
+export type TimeZoneGroup = TimeZone & {
+  people: Person[];
 };

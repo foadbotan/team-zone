@@ -3,13 +3,13 @@ import { twMerge } from 'tailwind-merge';
 import { MINUTES_IN_HOUR } from './constants';
 import { DateTime } from 'luxon';
 import { url } from 'inspector';
-import { Person, TimeZone } from '@/types';
+import { Person, TimeZone, TimeZoneGroup } from '@/types';
 
-function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-function formatTime(timeInMinutes: number): string {
+export function formatTime(timeInMinutes: number): string {
   const minutes = timeInMinutes % MINUTES_IN_HOUR;
   const hours = (timeInMinutes - minutes) / MINUTES_IN_HOUR;
   const formattedHours = hours.toString().padStart(2, '0');
@@ -17,30 +17,54 @@ function formatTime(timeInMinutes: number): string {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-function getAvatarSVGUrl(seed: string): string {
+export function getAvatarSVGUrl(seed: string): string {
   const url = new URL('https://api.dicebear.com/7.x/lorelei/svg');
   url.searchParams.set('seed', seed);
   return url.href;
 }
 
-function getTimeZoneOffset(timeZone: string): number {
+export function getTimeZoneOffset(timeZone: string): number {
   return DateTime.fromObject({}, { zone: timeZone }).offset;
 }
 
-function groupPeopleByTimeZone(people: Person[]): TimeZone[] {
-  const timeZonesTable = people.reduce((timeZones, person) => {
-    timeZones[person.timeZone] = timeZones[person.timeZone] || [];
-    timeZones[person.timeZone].push(person);
-    return timeZones;
-  }, {} as Record<string, Person[]>);
+export function groupBy<T>(array: T[], getGroup: (item: T) => string) {
+  return array.reduce((groups, item) => {
+    const group = getGroup(item);
+    groups[group] ??= [];
+    groups[group].push(item);
+    return groups;
+  }, {} as Record<string, T[]>);
+}
 
-  return Object.entries(timeZonesTable)
+export function groupPeopleByTimeZone(people: Person[]): TimeZoneGroup[] {
+  const timeZoneGroups = groupBy(people, ({ timeZone }) => timeZone);
+
+  return Object.entries(timeZoneGroups)
     .map(([timeZone, people]: [string, Person[]]) => ({
-      timeZone,
       people,
-      offset: getTimeZoneOffset(timeZone),
+      ...getTimeZoneDetails(timeZone),
     }))
     .sort((a, b) => a.offset - b.offset);
 }
 
-export { cn, formatTime, getAvatarSVGUrl, getTimeZoneOffset, groupPeopleByTimeZone };
+export function getTimeZoneDetails(timeZone: string): TimeZone {
+  const [region, city] = timeZone.split('/');
+  const offset = getTimeZoneOffset(timeZone);
+  return {
+    timeZone,
+    region,
+    city,
+    offset,
+    formattedOffset: formatUtcOffset(offset),
+  };
+}
+
+export function formatUtcOffset(offset: number): string {
+  const hours = offset / MINUTES_IN_HOUR;
+  const sign = hours < 0 ? '' : '+';
+  return `UTC${sign}${hours}`;
+}
+
+export const TIME_ZONES = Intl.supportedValuesOf('timeZone').map(getTimeZoneDetails);
+
+export const TIME_ZONE_REGIONS = groupBy(TIME_ZONES, ({ region }) => region);

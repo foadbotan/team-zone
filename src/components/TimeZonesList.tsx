@@ -2,8 +2,8 @@
 
 import { initialPeople } from '@/data/people';
 import { MINUTES_IN_DAY, MINUTES_IN_HOUR, QUARTER_HOUR } from '@/lib/constants';
-import { cn, formatTime, getTimeZoneOffset, groupPeopleByTimeZone } from '@/lib/utils';
-import { TimeZone } from '@/types';
+import { cn, formatTime, groupPeopleByTimeZone } from '@/lib/utils';
+import { TimeZoneGroup } from '@/types';
 import Team from './Team';
 import Avatar from './Avatar';
 import { useState } from 'react';
@@ -24,12 +24,16 @@ export default function TimeZonesList() {
   const [people, setPeople] = useState(initialPeople);
 
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
-  const timeZones: TimeZone[] = groupPeopleByTimeZone(selectedPeople);
+  const timeZoneGroups: TimeZoneGroup[] = groupPeopleByTimeZone(selectedPeople);
 
   return (
-    <>
+    <div className="space-y-10">
       <Team people={people} setPeople={setPeople} />
-      <div className="relative mt-20">
+      <div className="w-full h-px bg-neutral-200" />
+      <div className="relative">
+        <h2 className="text-xl font-bold leading-tight tracking-tight text-neutral-900">
+          Zones
+        </h2>
         <input
           type="range"
           className="absolute inset-0 z-20 bg-transparent appearance-none cursor-pointer h-full w-full"
@@ -45,27 +49,27 @@ export default function TimeZonesList() {
             left: `${(selectedTime / MINUTES_IN_DAY) * 100}%`,
           }}
         >
-          <p className="text-xl absolute transform -translate-x-1/2 -translate-y-10 text-white rounded-full w-20 h-20 bg-red-500 flex items-center justify-center">
+          <p className="text-xl absolute transform -translate-x-1/2  text-white rounded-full w-20 h-20 bg-red-500 flex items-center justify-center">
             {formatTime(selectedTime)}
           </p>
         </div>
 
-        <ul className="border rounded-xl p-4 pb-10 shadow-lg my-6 space-y-6">
-          {timeZones.map(({ timeZone, people }) => {
-            const offset = getTimeZoneOffset(timeZone);
+        <ul className="border rounded-xl p-6 pb-10 shadow-lg my-6 space-y-6">
+          {timeZoneGroups.map((tzGroup) => {
+            const offset = tzGroup.offset;
             let workEnd = getWorkEnd(offset);
             let workStart = offset < 0 ? 0 : offset;
             workEnd = workEnd > MINUTES_IN_DAY ? MINUTES_IN_DAY : workEnd;
 
             return (
-              <li key={timeZone}>
+              <li key={tzGroup.timeZone}>
                 <div className="flex items-end justify-between pb-2">
                   <div className="">
                     <p className="text-sm font-semibold leading-6 text-neutral-900">
-                      {timeZone}
+                      {tzGroup.city}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-neutral-500">
-                      {`UTC ${offset < 0 ? '' : '+'}${offset / MINUTES_IN_HOUR}`}
+                      {tzGroup.formattedOffset}
                     </p>
                   </div>
                   <ul
@@ -73,7 +77,7 @@ export default function TimeZonesList() {
                       '[&_img]:bg-green-500': inWorkingHours(selectedTime, offset),
                     })}
                   >
-                    {people.map((person) => (
+                    {tzGroup.people.map((person) => (
                       <Avatar person={person} key={person.name} asListItem />
                     ))}
                   </ul>
@@ -104,6 +108,6 @@ export default function TimeZonesList() {
           })}
         </ul>
       </div>
-    </>
+    </div>
   );
 }
