@@ -25,7 +25,7 @@ export default function Avatar({ person, className = '', onClick }: Prop) {
           height="48"
         />
       </div>
-      <span className="max-w-[12ch] truncate text-sm capitalize leading-6 text-neutral-900">
+      <span className="max-w-[12ch] truncate text-sm font-medium capitalize text-neutral-900">
         {person.name}
       </span>
     </div>

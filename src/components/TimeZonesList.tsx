@@ -10,6 +10,7 @@ import {
 import {
   cn,
   formatTime,
+  formatUtcOffset,
   getFormattedDate,
   getLocalOffset,
   groupPeopleByTimeZone,
@@ -18,6 +19,7 @@ import { Person, TimeZoneGroup } from '@/types';
 import { useState } from 'react';
 import Avatar from './Avatar';
 import Team from './Team';
+import { DateTime } from 'luxon';
 
 function getWorkEnd(offset: number): number {
   return MINUTES_IN_HOUR * 12 + offset;
@@ -30,6 +32,10 @@ export default function TimeZonesList() {
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
   const timeZoneGroups: TimeZoneGroup[] = groupPeopleByTimeZone(selectedPeople);
 
+  const minute = selectedTime % MINUTES_IN_HOUR;
+  const hour = (selectedTime - minute) / MINUTES_IN_HOUR;
+  const date = DateTime.local().set({ hour, minute });
+
   return (
     <div className="space-y-10">
       <Team people={people} setPeople={setPeople} />
@@ -40,12 +46,12 @@ export default function TimeZonesList() {
         </h2>
         <div className="absolute bottom-0 left-6 right-6 top-0 z-10">
           <div
-            className="pointer-events-none absolute bottom-0 top-0 w-1 select-none bg-red-500"
+            className="pointer-events-none absolute bottom-0 top-0 w-1 select-none bg-orange-500"
             style={{
               left: `${(selectedTime / MINUTES_IN_DAY) * 100}%`,
             }}
           >
-            <p className="flex h-20 w-20 -translate-x-1/2 transform  flex-col items-center justify-center rounded-full bg-red-500 text-xl font-medium text-white">
+            <p className="flex h-20 w-20 -translate-x-1/2 transform  flex-col items-center justify-center rounded-full bg-orange-500 text-xl font-medium text-white">
               {formatTime(selectedTime)}
               <span className="text-xs">Your time</span>
             </p>
@@ -60,7 +66,7 @@ export default function TimeZonesList() {
             onChange={(event) => setSelectedTime(Number(event.target.value))}
           />
         </div>
-        <ul className="my-6 space-y-6 rounded-xl border p-6 pb-10 shadow-lg">
+        <ul className="relative my-6 select-none space-y-6 rounded-xl border p-6 pb-10 shadow-lg">
           {timeZoneGroups.map((tzGroup) => {
             const offset = tzGroup.offset;
 
@@ -70,38 +76,16 @@ export default function TimeZonesList() {
 
             return (
               <li key={tzGroup.timeZone}>
-                <div className="flex items-end justify-between pb-2">
+                <div className="mb-2 flex items-end justify-between">
                   <div className="">
-                    <p className="text-sm font-semibold leading-6 text-neutral-900">
-                      {tzGroup.city}
+                    <p className="text-2xl font-semibold tabular-nums text-orange-500 ">
+                      {formatTime(selectedTime, tzGroup.timeZone)}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-neutral-500">
-                      {tzGroup.formattedOffset}
-                    </p>
+                    <p className="font-semibold text-neutral-900">{tzGroup.city}</p>
                   </div>
                   <ZoneAvatars people={tzGroup.people} isAvailable={isAvailable} />
                 </div>
                 <DayBar timeZone={tzGroup.timeZone} selectedTime={selectedTime} />
-                {/* <div
-                  className="grid w-full overflow-hidden rounded bg-neutral-200"
-                  style={{
-                    gridTemplateColumns: `repeat(${QUARTER_HOURS_IN_DAY}, 1fr)`,
-                  }}
-                >
-                  {Array.from({ length: QUARTER_HOURS_IN_DAY }).map((_, index) => {
-                    const time = (index + 1) * 15;
-                    const isWorkTime = time >= workStart && time <= workEnd;
-                    return (
-                      <div
-                        key={time}
-                        className={cn('h-6 ', {
-                          'bg-blue-400': isWorkTime,
-                          'bg-blue-500': isWorkTime && isAvailable,
-                        })}
-                      ></div>
-                    );
-                  })}
-                </div> */}
               </li>
             );
           })}
@@ -124,7 +108,7 @@ function ZoneAvatars({
         <Avatar
           person={person}
           key={person.name}
-          className={cn(isAvailable && 'bg-green-500')}
+          className={cn(isAvailable && 'bg-orange-500')}
         />
       ))}
     </div>
@@ -136,24 +120,24 @@ function DayBar({ timeZone, selectedTime }: { timeZone: string; selectedTime: nu
   const offsetPercentage = (offset / MINUTES_IN_DAY) * 100;
 
   return (
-    <div className="flex h-6 w-full overflow-hidden rounded bg-neutral-200">
-      <div
-        className="grid h-full w-full flex-shrink-0 grid-cols-24"
-        style={{
-          marginLeft: `${offsetPercentage}%`,
-        }}
-      >
-        <p className="col-span-8 col-start-10 rounded bg-blue-700 text-center font-bold text-white">
+    <div className="flex h-8 w-full justify-end overflow-hidden rounded bg-neutral-200">
+      <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
           {getFormattedDate(-1)}
         </p>
       </div>
       <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-        <p className="col-span-8 col-start-10 rounded bg-blue-700 text-center font-bold text-white">
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
           {getFormattedDate()}
         </p>
       </div>
-      <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-        <p className="col-span-8 col-start-10 rounded bg-blue-700 text-center font-bold text-white">
+      <div
+        className="grid h-full w-full flex-shrink-0 grid-cols-24"
+        style={{
+          marginRight: `${offsetPercentage}%`,
+        }}
+      >
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
           {getFormattedDate(1)}
         </p>
       </div>

@@ -8,14 +8,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// export function formatTime(timeInMinutes: number): string {
-//   const minutes = timeInMinutes % MINUTES_IN_HOUR;
-//   const hours = (timeInMinutes - minutes) / MINUTES_IN_HOUR;
-//   const formattedHours = hours.toString().padStart(2, '0');
-//   const formattedMinutes = minutes.toString().padStart(2, '0');
-//   return `${formattedHours}:${formattedMinutes}`;
-// }
-
 export function getAvatarSVGUrl(seed: string): string {
   const url = new URL('https://api.dicebear.com/7.x/lorelei/svg');
   url.searchParams.set('seed', seed);
@@ -28,6 +20,7 @@ export function getLocalOffset(timeZone: string): number {
   const otherOffset = DateTime.local({ zone: timeZone }).offset;
   return otherOffset - localOffset;
 }
+
 export function getUtcOffset(timeZone: string): number {
   return DateTime.now().setZone(timeZone).offset;
 }
@@ -68,10 +61,10 @@ export function getTimeZoneDetails(timeZone: string): TimeZone {
 }
 
 export function formatUtcOffset(timeZone: string): string {
-  const offset = getUtcOffset(timeZone);
+  const offset = getLocalOffset(timeZone);
   const hours = offset / MINUTES_IN_HOUR;
   const sign = hours < 0 ? '' : '+';
-  return `UTC${sign}${hours}`;
+  return `(${sign}${hours})`;
 }
 
 export const TIME_ZONES = Intl.supportedValuesOf('timeZone').map(getTimeZoneDetails);
