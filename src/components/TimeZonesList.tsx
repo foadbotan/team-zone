@@ -120,14 +120,14 @@ function DayBar({ timeZone, selectedTime }: { timeZone: string; selectedTime: nu
   const offsetPercentage = (offset / MINUTES_IN_DAY) * 100;
 
   return (
-    <div className="flex h-8 w-full justify-end overflow-hidden rounded bg-neutral-200">
+    <div className="flex h-6 w-full justify-end overflow-hidden rounded bg-neutral-200">
       <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 text-xs font-bold text-white">
           {getFormattedDate(-1)}
         </p>
       </div>
       <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 text-xs font-bold text-white">
           {getFormattedDate()}
         </p>
       </div>
@@ -137,7 +137,7 @@ function DayBar({ timeZone, selectedTime }: { timeZone: string; selectedTime: nu
           marginRight: `${offsetPercentage}%`,
         }}
       >
-        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 font-bold text-white">
+        <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-emerald-600 text-xs font-bold text-white">
           {getFormattedDate(1)}
         </p>
       </div>

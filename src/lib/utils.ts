@@ -82,5 +82,5 @@ export function formatTime(time: number, timeZone?: string): string {
 }
 
 export function getFormattedDate(daysOffset = 0): string {
-  return DateTime.now().plus({ days: daysOffset }).toFormat('ccc, d LLL');
+  return DateTime.now().plus({ days: daysOffset }).toFormat('d LLL');
 }
