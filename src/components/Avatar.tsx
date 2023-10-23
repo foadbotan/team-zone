@@ -4,27 +4,17 @@ import { XIcon } from 'lucide-react';
 
 type Prop = {
   person: Person;
-  asListItem?: boolean;
   className?: string;
   onClick?: () => void;
-  children?: React.ReactNode;
 };
 
-export default function Avatar({
-  person,
-  asListItem = false,
-  className = '',
-  onClick,
-  children,
-}: Prop) {
+export default function Avatar({ person, className = '', onClick }: Prop) {
   if (!person || !person.name) return;
 
-  const Container = asListItem ? 'li' : 'div';
-
   return (
-    <Container className="flex flex-col items-center  relative" onClick={onClick}>
+    <div className="relative flex flex-col items-center" onClick={onClick}>
       <div
-        className={cn('w-12 h-12 rounded-full bg-neutral-200 overflow-hidden', className)}
+        className={cn('h-12 w-12 overflow-hidden rounded-full bg-neutral-200', className)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -35,10 +25,9 @@ export default function Avatar({
           height="48"
         />
       </div>
-      <span className="max-w-[12ch] truncate capitalize text-sm leading-6 text-neutral-900">
+      <span className="max-w-[12ch] truncate text-sm capitalize leading-6 text-neutral-900">
         {person.name}
       </span>
-      {children}
-    </Container>
+    </div>
   );
 }
