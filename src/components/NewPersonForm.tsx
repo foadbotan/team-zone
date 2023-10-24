@@ -1,6 +1,7 @@
 import { Person } from '@/lib/types';
 import { useState } from 'react';
 import Select from 'react-select';
+import { Divider } from './Divider';
 
 type Props = {
   addPerson: (person: Person) => void;
@@ -16,7 +17,7 @@ const timeZoneOptions = Intl.supportedValuesOf('timeZone').map((timeZone) => ({
   label: timeZone,
 }));
 
-export function AddPersonForm({ addPerson }: Props) {
+export function NewPersonForm({ addPerson }: Props) {
   const [name, setName] = useState('');
   const [timeZone, setTimeZone] = useState<TimeZoneOption | null>(null);
 
@@ -37,10 +38,8 @@ export function AddPersonForm({ addPerson }: Props) {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex max-w-sm flex-col space-y-4 rounded-xl border p-6 shadow-md"
-    >
+    <form onSubmit={onSubmit} className="flex max-w-sm flex-col space-y-4 ">
+      <Divider />
       <h3 className="text-xl font-medium text-gray-900">Add a team member</h3>
 
       <div className="flex flex-1 flex-col gap-1">

@@ -2,8 +2,8 @@ import { Person } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { CheckIcon, SettingsIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
-import { AddPersonForm } from './AddPersonForm';
 import { Avatar } from './Avatar';
+import { NewPersonForm } from './NewPersonForm';
 
 type Props = {
   people: Person[];
@@ -76,7 +76,7 @@ export function Team({ people, setPeople }: Props) {
             </div>
           </li>
         </ul>
-        {isEditing && <AddPersonForm addPerson={addPerson} />}
+        {isEditing && <NewPersonForm addPerson={addPerson} />}
       </div>
     </section>
   );
