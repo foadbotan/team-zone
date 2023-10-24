@@ -1,15 +1,19 @@
 import { MINUTES_IN_DAY } from '@/lib/constants';
-import { getLocalOffset } from '@/lib/utils';
+import { cn, getLocalOffset, withinWorkHours } from '@/lib/utils';
 import { DateTime } from 'luxon';
-import { Day } from './Day';
 
-export function DayProgressBar({
-  timeZone,
-  selectedDateTime,
-}: {
+type DayProgressBarProps = {
   timeZone: string;
   selectedDateTime: DateTime;
-}) {
+};
+
+type DayProps = {
+  selectedDateTime: DateTime;
+  daysOffset: number;
+  timeZone: string;
+};
+
+export function DayProgressBar({ timeZone, selectedDateTime }: DayProgressBarProps) {
   const offset = getLocalOffset(timeZone);
   const offsetPercentage = (offset / MINUTES_IN_DAY) * 100;
 
@@ -35,6 +39,27 @@ export function DayProgressBar({
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Day({ selectedDateTime, daysOffset, timeZone }: DayProps) {
+  const date = selectedDateTime.plus({ days: daysOffset });
+  const isWorkTime = withinWorkHours(selectedDateTime, timeZone);
+  const isSameDay = date.hasSame(selectedDateTime.setZone(timeZone), 'day');
+
+  const canWork = isWorkTime && isSameDay;
+
+  return (
+    <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
+      <p
+        className={cn(
+          'col-span-8 col-start-10 flex items-center justify-center rounded bg-blue-400 text-xs font-bold text-white',
+          canWork && 'bg-blue-600',
+        )}
+      >
+        {date.toFormat('d LLL')}
+      </p>
     </div>
   );
 }

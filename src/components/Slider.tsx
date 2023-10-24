@@ -1,13 +1,12 @@
 import { MINUTES_IN_DAY } from '@/lib/constants';
 import { formatTime } from '@/lib/utils';
 
-export function Slider({
-  selectedTime,
-  setSelectedTime,
-}: {
+type SliderProps = {
   selectedTime: number;
   setSelectedTime: (time: number) => void;
-}) {
+};
+
+export function Slider({ selectedTime, setSelectedTime }: SliderProps) {
   return (
     <div className="absolute bottom-0 left-6 right-6 top-0 z-10">
       <div

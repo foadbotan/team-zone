@@ -12,7 +12,6 @@ type Props = {
 
 export function Team({ people, setPeople }: Props) {
   const [isEditing, setIsEditing] = useState(false);
-  const EditIcon = isEditing ? CheckIcon : SettingsIcon;
 
   function toggleIsSelected(person: Person) {
     if (isEditing) return;
@@ -65,19 +64,36 @@ export function Team({ people, setPeople }: Props) {
             </li>
           ))}
           <li className="flex w-16 justify-center">
-            <div
-              className={cn(
-                'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-neutral-500 hover:bg-neutral-300 sm:h-12 sm:w-12',
-                isEditing && 'bg-green-500 text-white hover:bg-green-600',
-              )}
-              onClick={() => setIsEditing((prev) => !prev)}
-            >
-              <EditIcon className="h-6 w-6" />
-            </div>
+            <EditButton
+              isEditing={isEditing}
+              toggleEditing={() => setIsEditing((prev) => !prev)}
+            />
           </li>
         </ul>
         {isEditing && <NewPersonForm addPerson={addPerson} />}
       </div>
     </section>
+  );
+}
+
+function EditButton({
+  isEditing,
+  toggleEditing,
+}: {
+  isEditing: boolean;
+  toggleEditing: () => void;
+}) {
+  const EditIcon = isEditing ? CheckIcon : SettingsIcon;
+
+  return (
+    <div
+      className={cn(
+        'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-neutral-500 hover:bg-neutral-300 sm:h-12 sm:w-12',
+        isEditing && 'bg-green-500 text-white hover:bg-green-600',
+      )}
+      onClick={toggleEditing}
+    >
+      <EditIcon className="h-6 w-6" />
+    </div>
   );
 }
