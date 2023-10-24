@@ -38,9 +38,11 @@ export function NewPersonForm({ addPerson }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex max-w-sm flex-col space-y-4 ">
-      <Divider />
-      <h3 className="text-xl font-medium text-gray-900">Add a team member</h3>
+    <form
+      onSubmit={onSubmit}
+      className="flex min-w-full flex-col space-y-4 border-t pt-6 sm:min-w-[20rem]"
+    >
+      <h3 className="text-xl font-medium text-gray-900">New team member</h3>
 
       <div className="flex flex-1 flex-col gap-1">
         <label htmlFor="name">Name</label>

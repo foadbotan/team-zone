@@ -21,9 +21,9 @@ export function Zone({ people }: { people: Person[] }) {
   const timeZoneGroups = groupPeopleByTimeZone(people);
 
   return (
-    <section>
+    <section className="space-y-2">
       <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Zones</h2>
-      <div className="relative -mx-8 my-6 select-none space-y-6 border bg-white p-6 shadow sm:mx-0 sm:rounded-lg">
+      <div className="relative -mx-8 select-none space-y-6 border bg-white p-6 sm:mx-0 sm:rounded-lg sm:shadow-md">
         <Slider selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
         {timeZoneGroups.map(({ timeZone, people, city }) => {
           const canWork = withinWorkHours(selectedDateTime, timeZone);
