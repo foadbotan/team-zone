@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { Slider } from './Slider';
 
-export function Zone({ people }: { people: Person[] }) {
+export function Zones({ people }: { people: Person[] }) {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
 
   const { hour, minute } = timeFromMinutes(selectedTime);

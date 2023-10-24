@@ -1,6 +1,6 @@
 'use client';
 import { Team } from '@/components/Team';
-import { Zone } from '@/components/Zone';
+import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ export default function Home() {
     <main className="container space-y-12  py-12">
       <h1 className="text-center text-3xl font-bold tracking-tight">Team Zones</h1>
       <Team people={people} setPeople={setPeople} />
-      <Zone people={selectedPeople} />
+      <Zones people={selectedPeople} />
     </main>
   );
 }
