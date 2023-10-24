@@ -1,4 +1,4 @@
-import { Person } from '@/types';
+import { Person } from './types';
 
 export const initialPeople: Person[] = [
   { name: 'Joey', timeZone: 'Europe/London', isSelected: true },

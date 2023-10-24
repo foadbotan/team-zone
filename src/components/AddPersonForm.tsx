@@ -1,4 +1,4 @@
-import { Person } from '@/types';
+import { Person } from '@/lib/types';
 import { useState } from 'react';
 import Select from 'react-select';
 
@@ -11,14 +11,12 @@ type TimeZoneOption = {
   label: string;
 };
 
-const timeZoneOptions: TimeZoneOption[] = Intl.supportedValuesOf('timeZone').map(
-  (timeZone) => ({
-    value: timeZone,
-    label: timeZone,
-  }),
-);
+const timeZoneOptions = Intl.supportedValuesOf('timeZone').map((timeZone) => ({
+  value: timeZone,
+  label: timeZone,
+}));
 
-export default function AddPersonForm({ addPerson }: Props) {
+export function AddPersonForm({ addPerson }: Props) {
   const [name, setName] = useState('');
   const [timeZone, setTimeZone] = useState<TimeZoneOption | null>(null);
 
@@ -41,7 +39,7 @@ export default function AddPersonForm({ addPerson }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="mt-20 flex max-w-sm flex-col space-y-4 rounded-xl border p-6 shadow-md"
+      className="flex max-w-sm flex-col space-y-4 rounded-xl border p-6 shadow-md"
     >
       <h3 className="text-xl font-medium text-gray-900">Add a team member</h3>
 

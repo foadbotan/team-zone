@@ -1,12 +1,18 @@
-import TimeZonesList from '@/components/TimeZonesList';
+'use client';
+import { Team } from '@/components/Team';
+import { Zone } from '@/components/Zone';
+import { initialPeople } from '@/lib/data';
+import { useState } from 'react';
 
 export default function Home() {
+  const [people, setPeople] = useState(initialPeople);
+  const selectedPeople = people.filter(({ isSelected }) => isSelected);
+
   return (
-    <main className="container py-6">
-      <h1 className="m-10 text-center text-3xl font-bold leading-tight tracking-tight text-gray-900">
-        Team Zones
-      </h1>
-      <TimeZonesList />
+    <main className="container space-y-12 bg-neutral-100 py-12">
+      <h1 className="text-center text-3xl font-bold tracking-tight">Team Zones</h1>
+      <Team people={people} setPeople={setPeople} />
+      <Zone people={selectedPeople} />
     </main>
   );
 }

@@ -1,8 +1,8 @@
-import { Person, TimeZone, TimeZoneGroup } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import { twMerge } from 'tailwind-merge';
-import { MINUTES_IN_HOUR } from './constants';
+import { MINUTES_IN_HOUR, WORKDAY_END_HOUR, WORKDAY_START_HOUR } from './constants';
+import { Person, TimeZone, TimeZoneGroup } from './types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,9 +16,8 @@ export function getAvatarSVGUrl(seed: string): string {
 
 export function getLocalOffset(timeZone: string): number {
   const localOffset = DateTime.now().offset;
-  // const otherOffset = DateTime.now().setZone(timeZone).offset;
   const otherOffset = DateTime.local({ zone: timeZone }).offset;
-  return otherOffset - localOffset;
+  return localOffset - otherOffset;
 }
 
 export function getUtcOffset(timeZone: string): number {
@@ -67,14 +66,10 @@ export function formatUtcOffset(timeZone: string): string {
   return `(${sign}${hours})`;
 }
 
-export const TIME_ZONES = Intl.supportedValuesOf('timeZone').map(getTimeZoneDetails);
-
-export const TIME_ZONE_REGIONS = groupBy(TIME_ZONES, ({ region }) => region);
-
 export function formatTime(time: number, timeZone?: string): string {
-  const minute = time % MINUTES_IN_HOUR;
-  const hour = (time - minute) / MINUTES_IN_HOUR;
-  const date = DateTime.now().set({ hour, minute });
+  const { hour, minute } = timeFromMinutes(time);
+
+  const date = DateTime.local().set({ hour, minute });
   if (timeZone) {
     return date.setZone(timeZone).toFormat('T');
   }
@@ -84,3 +79,26 @@ export function formatTime(time: number, timeZone?: string): string {
 export function getFormattedDate(daysOffset = 0): string {
   return DateTime.now().plus({ days: daysOffset }).toFormat('d LLL');
 }
+
+export function timeFromMinutes(minutes: number) {
+  return {
+    hour: Math.floor(minutes / MINUTES_IN_HOUR),
+    minute: minutes % MINUTES_IN_HOUR,
+  };
+}
+
+export function withinWorkHours(selectedDateTime: DateTime, timeZone: string): boolean {
+  const date = selectedDateTime
+    .setZone(timeZone)
+    .set({ minute: 0, second: 0, millisecond: 0 });
+
+  const workTime = Interval.fromDateTimes(
+    date.set({ hour: WORKDAY_START_HOUR }),
+    date.set({ hour: WORKDAY_END_HOUR }),
+  );
+
+  return workTime.contains(selectedDateTime);
+}
+
+// handy func for later
+// workRange.engulfs(selectedRange)

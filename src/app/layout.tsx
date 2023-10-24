@@ -1,6 +1,6 @@
-import NavBar from '@/components/NavBar';
-import './globals.css';
+import { NavBar } from '@/components/NavBar';
 import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Team Zones - Free Time Zone Collaboration Tool',
