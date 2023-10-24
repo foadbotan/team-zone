@@ -42,15 +42,15 @@ export function Team({ people, setPeople }: Props) {
           {people.map((person) => (
             <li
               key={person.name}
-              className="relative flex w-16 flex-col items-center justify-center"
+              className={cn(
+                'relative flex w-16 flex-col items-center justify-center',
+                !person.isSelected && 'opacity-30',
+                isEditing && 'opacity-100',
+              )}
             >
               <Avatar
                 name={person.name}
-                className={cn(
-                  'cursor-pointer opacity-20 hover:bg-neutral-400 ',
-                  person.isSelected && 'opacity-100',
-                  isEditing && 'cursor-default opacity-100 hover:bg-neutral-200',
-                )}
+                className={cn(!isEditing && 'cursor-pointer hover:bg-neutral-400')}
                 onClick={() => toggleIsSelected(person)}
               />
               {isEditing && (
