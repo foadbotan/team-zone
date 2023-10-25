@@ -2,11 +2,14 @@
 import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
-import { useState } from 'react';
+import { Person } from '@/lib/types';
+import { useUrl } from '@/lib/useUrl';
 
 export default function Home() {
-  const [people, setPeople] = useState(initialPeople);
+  const [people, setPeople] = useUrl<Person[]>('people', initialPeople);
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
+
+  console.log(people);
 
   return (
     <main className="container space-y-12  py-12">
