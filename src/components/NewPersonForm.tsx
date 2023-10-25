@@ -51,7 +51,7 @@ export function NewPersonForm({ addPerson }: Props) {
           className="rounded-sm border border-neutral-300 px-3 py-1.5 placeholder:text-neutral-500"
           placeholder="John Doe"
           required
-          minLength={2}
+          minLength={1}
           maxLength={50}
           value={name}
           onChange={(event) => setName(event.target.value)}

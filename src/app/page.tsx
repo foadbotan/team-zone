@@ -3,13 +3,36 @@ import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
 import { Person } from '@/lib/types';
-import { useUrl } from '@/lib/useUrl';
+import { useQueryState, parseAsJson } from 'next-usequerystate';
+import { z } from 'zod';
+
+const isValidTimeZone = (timeZone: string) => {
+  const timeZoneOptions = Intl.supportedValuesOf('timeZone');
+  return timeZoneOptions.includes(timeZone);
+};
+
+const PersonSchema = z.object({
+  name: z.string().min(1),
+  timeZone: z.string().refine(isValidTimeZone),
+  isSelected: z.boolean(),
+});
+
+const peopleSchema = z.array(PersonSchema);
+
+function parsePeople(value: unknown): Person[] {
+  try {
+    return peopleSchema.parse(value);
+  } catch {
+    return initialPeople;
+  }
+}
 
 export default function Home() {
-  const [people, setPeople] = useUrl<Person[]>('people', initialPeople);
+  const [people, setPeople] = useQueryState(
+    'people',
+    parseAsJson<Person[]>(parsePeople).withDefault(initialPeople),
+  );
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
-
-  console.log(people);
 
   return (
     <main className="container space-y-12  py-12">
