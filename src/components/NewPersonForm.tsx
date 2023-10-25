@@ -1,7 +1,6 @@
 import { Person } from '@/lib/types';
 import { useState } from 'react';
 import Select from 'react-select';
-import { Divider } from './Divider';
 
 type Props = {
   addPerson: (person: Person) => void;
