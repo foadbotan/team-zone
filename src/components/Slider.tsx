@@ -7,15 +7,21 @@ type SliderProps = {
 };
 
 export function Slider({ selectedTime, setSelectedTime }: SliderProps) {
+  const offsetPercentage = (selectedTime / MINUTES_IN_DAY) * 100;
   return (
     <div className="absolute bottom-0 left-6 right-6 top-0 z-10 overflow-hidden">
       <div
         className="pointer-events-none absolute bottom-0 top-0 z-10 w-1 select-none bg-green-600"
         style={{
-          left: `${(selectedTime / MINUTES_IN_DAY) * 100}%`,
+          left: `${offsetPercentage}%`,
         }}
       >
-        <p className="flex w-fit -translate-x-1/2 transform flex-col items-center justify-center rounded bg-green-600 px-3 py-1">
+        <p
+          className="flex w-fit flex-col items-center justify-center rounded bg-green-600 px-3 py-1"
+          style={{
+            transform: `translateX(${-offsetPercentage}%)`,
+          }}
+        >
           <span className="text-center  font-bold text-white">
             {formatTime(selectedTime)}
           </span>
