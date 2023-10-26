@@ -9,10 +9,7 @@ export function NavBar() {
         <nav className="">
           <ul className="flex items-center justify-between gap-4">
             <li>
-              <Link href="#">About</Link>
-            </li>
-            <li>
-              <Link href="#">Contact</Link>
+              <Link href="/about">About</Link>
             </li>
           </ul>
         </nav>

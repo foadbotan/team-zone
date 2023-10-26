@@ -22,10 +22,10 @@
     "react-select": "^5.7.7",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "urltron": "^0.1.13",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/luxon": "^3.3.3",
     "@types/node": "^20",
     "@types/react": "^18",
