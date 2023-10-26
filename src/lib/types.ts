@@ -4,6 +4,8 @@ export type Person = {
   isSelected?: boolean;
 };
 
+export type People = Person[];
+
 export type TimeZone = {
   timeZone: string;
   region: string;
@@ -13,5 +15,5 @@ export type TimeZone = {
 };
 
 export type TimeZoneGroup = TimeZone & {
-  people: Person[];
+  people: People;
 };

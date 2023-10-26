@@ -2,35 +2,18 @@
 import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
-import { Person } from '@/lib/types';
+import { People, Person } from '@/lib/types';
+import { PeopleSchema } from '@/lib/validation';
 import { useQueryState, parseAsJson } from 'next-usequerystate';
-import { z } from 'zod';
 
-const isValidTimeZone = (timeZone: string) => {
-  const timeZoneOptions = Intl.supportedValuesOf('timeZone');
-  return timeZoneOptions.includes(timeZone);
-};
-
-const PersonSchema = z.object({
-  name: z.string().min(1),
-  timeZone: z.string().refine(isValidTimeZone),
-  isSelected: z.boolean(),
-});
-
-const peopleSchema = z.array(PersonSchema);
-
-function parsePeople(value: unknown): Person[] {
-  try {
-    return peopleSchema.parse(value);
-  } catch {
-    return initialPeople;
-  }
+function validatePeople(value: unknown): People {
+  return PeopleSchema.parse(value);
 }
 
 export default function Home() {
   const [people, setPeople] = useQueryState(
     'people',
-    parseAsJson<Person[]>(parsePeople).withDefault(initialPeople),
+    parseAsJson<People>(validatePeople).withDefault(initialPeople),
   );
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
 

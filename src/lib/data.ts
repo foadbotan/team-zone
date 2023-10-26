@@ -1,6 +1,6 @@
-import { Person } from './types';
+import { People } from './types';
 
-export const initialPeople: Person[] = [
+export const initialPeople: People = [
   { name: 'Joey', timeZone: 'Europe/London', isSelected: true },
   { name: 'Rachel', timeZone: 'Europe/Moscow', isSelected: true },
   { name: 'Monica', timeZone: 'America/Los_Angeles', isSelected: false },

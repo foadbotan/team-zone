@@ -1,13 +1,13 @@
-import { Person } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { CheckIcon, SettingsIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { NewPersonForm } from './NewPersonForm';
+import { People, Person } from '@/lib/types';
 
 type Props = {
-  people: Person[];
-  setPeople: (people: Person[]) => void;
+  people: People;
+  setPeople: (people: People) => void;
 };
 
 export function Team({ people, setPeople }: Props) {
