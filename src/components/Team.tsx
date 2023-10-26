@@ -48,7 +48,7 @@ export function Team({ people, setPeople }: Props) {
               )}
             >
               <Avatar
-                name={person.name}
+                person={person}
                 className={cn(!isEditing && 'cursor-pointer hover:bg-neutral-400')}
                 onClick={() => toggleIsSelected(person)}
               />

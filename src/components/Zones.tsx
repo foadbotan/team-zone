@@ -50,8 +50,12 @@ function Zone({ timeZone, people, city, selectedDateTime }: ZoneProps) {
           <p className="text-sm font-semibold text-neutral-900">{city}</p>
         </div>
         <div className="flex gap-2">
-          {people.map(({ name }) => (
-            <Avatar name={name} key={name} className={cn({ 'bg-green-600': canWork })} />
+          {people.map((person) => (
+            <Avatar
+              key={person.name}
+              person={person}
+              className={cn({ 'bg-green-600': canWork })}
+            />
           ))}
         </div>
       </div>
