@@ -1,4 +1,5 @@
 'use client';
+
 import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
