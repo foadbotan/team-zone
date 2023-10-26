@@ -68,7 +68,7 @@ export default function page() {
         Team Zones is created by Foad Botan, a passionate developer dedicated to creating
         tools that enhance productivity and efficiency. You can connect with Foad on{' '}
         <a href="https://github.com/foadbotan">GitHub</a>,{' '}
-        <a href="https://www.linkedin.com/foadbotan">LinkedIn</a>, and{' '}
+        <a href="https://www.linkedin.com/in/foadbotan">LinkedIn</a>, and{' '}
         <a href="https://twitter.com/FoadBotan">Twitter</a>.
       </p>
     </main>
