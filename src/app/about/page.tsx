@@ -1,9 +1,15 @@
-import React from 'react';
-import Link from 'next/link';
+'use client';
 
 export default function page() {
   return (
     <main className="prose prose-stone lg:prose-xl container space-y-12 py-12">
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className=" cursor-pointer text-sm font-medium text-neutral-500 underline hover:text-neutral-700"
+      >
+        ← Back
+      </button>
       <h1 className="text-center tracking-tight">About Team Zones</h1>
       <p>
         Team Zones is a free tool designed to simplify scheduling and enhance coordination
