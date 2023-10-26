@@ -8,9 +8,9 @@ type SliderProps = {
 
 export function Slider({ selectedTime, setSelectedTime }: SliderProps) {
   return (
-    <div className="absolute bottom-0 left-6 right-6 top-0 z-10">
+    <div className="absolute bottom-0 left-6 right-6 top-0 z-10 overflow-hidden">
       <div
-        className="pointer-events-none absolute bottom-0 top-0 w-1 select-none bg-green-600"
+        className="pointer-events-none absolute bottom-0 top-0 z-10 w-1 select-none bg-green-600"
         style={{
           left: `${(selectedTime / MINUTES_IN_DAY) * 100}%`,
         }}
@@ -24,7 +24,7 @@ export function Slider({ selectedTime, setSelectedTime }: SliderProps) {
       </div>
       <input
         type="range"
-        className="h-full w-full cursor-pointer appearance-none bg-transparent focus:outline-none "
+        className="relative h-full w-full cursor-pointer appearance-none bg-transparent focus:outline-none "
         min={0}
         max={MINUTES_IN_DAY - 1}
         step={15}
