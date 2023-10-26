@@ -15,9 +15,8 @@ export default function page() {
         Team Zones is a free tool designed to simplify scheduling and enhance coordination
         for remote teams across different time zones. It&apos;s a perfect solution for
         global teams looking to improve their productivity and communication efficiency.
-        Features
       </p>
-
+      <h2>Features</h2>
       <ol>
         <li>
           <strong>Team Members List:</strong> Team Zones provides a list of team members,
