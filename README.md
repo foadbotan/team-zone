@@ -2,6 +2,8 @@
 
 Team Zones is a free tool designed to simplify scheduling and enhance coordination for remote teams across different time zones. It's a perfect solution for global teams looking to improve their productivity and communication efficiency. The live application can be accessed at https://team-zone.vercel.app/.
 
+![Team Zones screen shot](./screen-shot.png)
+
 ## Technologies Used
 
 - Next.js: A popular React framework for building web applications.
