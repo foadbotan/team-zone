@@ -1,36 +1,33 @@
-# Team Zone
+# Team Zones
 
-Team Zone is a useful tool for managing time zone differences in remote teams. It simplifies scheduling meetings, tracking deadlines and enhances communication efficiency. Eliminate time zone confusion and improve productivity with Team Zone.
+Team Zones is a free tool designed to simplify scheduling and enhance coordination for remote teams across different time zones. It's a perfect solution for global teams looking to improve their productivity and communication efficiency. The live application can be accessed at https://team-zone.vercel.app/.
 
-## Components
+## Technologies Used
 
-1. A list of team members
+- Next.js: A popular React framework for building web applications.
+- Tailwind CSS: A utility-first CSS framework for rapidly building custom user interfaces.
+- Zod: A TypeScript-first schema declaration and validation library.
+- Luxon: A powerful library for working with dates and times in JavaScript.
+- useQueryState: An open-source Next.js hook that stores React state in the URL for persistence and sharing.
 
-   - The list will be offset list by time zone and color coded (like a Gantt chart)
+## Approach Taken
 
-2. A range slider to select a time range
+The application was built using a component-based approach, leveraging the power of React and Next.js. The UI state is stored in the URL, allowing users to share a link to a specific timezone view without signing up or logging in. This is achieved using the useQueryState hook from the next-usequerystate package.
 
-   - The time for each team member will be highlighted in the list
+## Running Tests
 
-3. A form to input other info about the meeting
+The application uses Jest and Testing Library for testing. To run the tests, follow these steps:
 
-## State
+1. Clone the repository to your local machine.
+2. Navigate to the project directory.
+3. Run `npm install` to install the dependencies.
+4. Run `npm run test` to execute the tests.
 
-UI state will be stored in the URL. This will allow users to share a link to a specific view timezone view without signing up.
+## Unsolved Problems
 
-## Data
-
-I might fetch time zone data from WorldTimeAPI. I will also need to store the user's data in a database.
-I'll use the Luxon or Date-fns to interact with the dates and times.
-Supabase will be used for the database.
+Currently, there are no unsolved problems in the project. However, future enhancements could include the ability to persist team member data using a backend database and user authentication for personalized team management.
 
 ## Routes
 
-- `/` - Home page
-- `/login` - Login page
-- `/signup` - Signup page
-- `/teams` - Dashboard page
-- `/teams/:id` - Dashboard page for a specific team
-- `/teams/:id/meetings` - Meeting page for all meetings for a specific team
-- `/teams/:id/meetings/:id` - Meeting page for a specific meeting for a specific team
-- `/users/:id` - User profile page
+- `/` Home page: Displays the main interface for managing and viewing team members and their respective time zones.
+- `/about` About page: Provides information about the Team Zones tool, its features, and the technology stack used to build it.
