@@ -33,7 +33,7 @@ export function Team({ people, setPeople }: Props) {
   }
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-2" data-testid="team">
       <h2 className="text-center text-2xl font-medium tracking-tight text-neutral-900">
         Team
       </h2>
@@ -72,7 +72,9 @@ export function Team({ people, setPeople }: Props) {
             />
           </li>
         </ul>
-        {isEditing && <NewPersonForm addPerson={addPerson} />}
+        {isEditing && (
+          <NewPersonForm data-testid="new-person-form" addPerson={addPerson} />
+        )}
       </div>
     </section>
   );
@@ -88,7 +90,8 @@ function EditButton({
   const EditIcon = isEditing ? CheckIcon : SettingsIcon;
 
   return (
-    <div
+    <button
+      data-testid="edit-button"
       className={cn(
         'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-neutral-500 hover:bg-neutral-300 sm:h-12 sm:w-12',
         isEditing && 'bg-green-500 text-white hover:bg-green-600',
@@ -96,6 +99,6 @@ function EditButton({
       onClick={toggleEditing}
     >
       <EditIcon className="h-6 w-6" />
-    </div>
+    </button>
   );
 }

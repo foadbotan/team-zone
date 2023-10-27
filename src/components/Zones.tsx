@@ -16,7 +16,7 @@ export function Zones({ people }: { people: People }) {
   const zones = groupPeopleByTimeZone(people);
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-2" data-testid="zones">
       <h2 className="text-center text-2xl font-medium tracking-tight text-neutral-900">
         Zones
       </h2>

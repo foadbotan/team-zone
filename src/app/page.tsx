@@ -3,7 +3,7 @@
 import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
 import { initialPeople } from '@/lib/data';
-import { People, Person } from '@/lib/types';
+import { People } from '@/lib/types';
 import { PeopleSchema } from '@/lib/validation';
 import { useQueryState, parseAsJson } from 'next-usequerystate';
 
