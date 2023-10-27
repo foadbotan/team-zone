@@ -1,20 +1,13 @@
 import { MINUTES_IN_DAY } from '@/lib/constants';
-import { cn, getLocalOffset, withinWorkHours } from '@/lib/utils';
-import { DateTime } from 'luxon';
+import { cn, getDateTimeFromMinutes, getOffset, withinWorkHours } from '@/lib/utils';
 
 type DayProgressBarProps = {
   timeZone: string;
-  selectedDateTime: DateTime;
+  selectedTime: number;
 };
 
-type DayProps = {
-  selectedDateTime: DateTime;
-  daysOffset: number;
-  timeZone: string;
-};
-
-export function DayProgressBar({ timeZone, selectedDateTime }: DayProgressBarProps) {
-  const offset = getLocalOffset(timeZone);
+export function DayProgressBar({ timeZone, selectedTime }: DayProgressBarProps) {
+  const offset = getOffset(timeZone);
   const offsetPercentage = (offset / MINUTES_IN_DAY) * 100;
 
   return (
@@ -25,31 +18,28 @@ export function DayProgressBar({ timeZone, selectedDateTime }: DayProgressBarPro
           transform: `translateX(${offsetPercentage}%)`,
         }}
       >
-        <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-          <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-blue-400 text-xs font-bold text-white">
-            {selectedDateTime.minus({ days: 1 }).toFormat('d LLL')}
-          </p>
-        </div>
-        <Day selectedDateTime={selectedDateTime} timeZone={timeZone} daysOffset={-1} />
-        <Day selectedDateTime={selectedDateTime} timeZone={timeZone} daysOffset={0} />
-        <Day selectedDateTime={selectedDateTime} timeZone={timeZone} daysOffset={1} />
-        <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
-          <p className="col-span-8 col-start-10 flex items-center justify-center rounded bg-blue-400 text-xs font-bold text-white">
-            {selectedDateTime.plus({ days: 1 }).toFormat('d LLL')}
-          </p>
-        </div>
+        <DayBlock selectedTime={selectedTime} timeZone={timeZone} offset={-1} />
+        <DayBlock selectedTime={selectedTime} timeZone={timeZone} offset={0} />
+        <DayBlock selectedTime={selectedTime} timeZone={timeZone} offset={1} />
       </div>
     </div>
   );
 }
 
-function Day({ selectedDateTime, daysOffset, timeZone }: DayProps) {
-  const date = selectedDateTime.plus({ days: daysOffset });
+type DayBlockProps = {
+  selectedTime: number;
+  offset: number;
+  timeZone: string;
+};
+
+function DayBlock({ selectedTime, offset, timeZone }: DayBlockProps) {
+  const selectedDateTime = getDateTimeFromMinutes(selectedTime);
+  const dayBlock = selectedDateTime.plus({ days: offset });
+
   const isWorkTime = withinWorkHours(selectedDateTime, timeZone);
-  const isSameDay = date.hasSame(selectedDateTime.setZone(timeZone), 'day');
+  const isToday = dayBlock.day === selectedDateTime.setZone(timeZone).day;
 
-  const canWork = isWorkTime && isSameDay;
-
+  const canWork = isWorkTime && isToday;
   return (
     <div className="grid h-full w-full flex-shrink-0 grid-cols-24">
       <p
@@ -58,7 +48,7 @@ function Day({ selectedDateTime, daysOffset, timeZone }: DayProps) {
           canWork && 'bg-blue-600',
         )}
       >
-        {date.toFormat('d LLL')}
+        {dayBlock.toFormat('d LLL')}
       </p>
     </div>
   );

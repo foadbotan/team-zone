@@ -1,8 +1,13 @@
 import { clsx, type ClassValue } from 'clsx';
 import { DateTime, Interval } from 'luxon';
 import { twMerge } from 'tailwind-merge';
-import { MINUTES_IN_HOUR, WORKDAY_END_HOUR, WORKDAY_START_HOUR } from './constants';
-import { Person, TimeZone, TimeZoneGroup } from './types';
+import {
+  MINUTES_IN_DAY,
+  MINUTES_IN_HOUR,
+  WORKDAY_END_HOUR,
+  WORKDAY_START_HOUR,
+} from './constants';
+import { People, TimeZoneGroup } from './types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,14 +19,10 @@ export function getAvatarSVGUrl(seed: string): string {
   return url.href;
 }
 
-export function getLocalOffset(timeZone: string): number {
+export function getOffset(timeZone: string): number {
   const localOffset = DateTime.now().offset;
   const otherOffset = DateTime.local({ zone: timeZone }).offset;
   return localOffset - otherOffset;
-}
-
-export function getUtcOffset(timeZone: string): number {
-  return DateTime.now().setZone(timeZone).offset;
 }
 
 export function groupBy<T>(array: T[], getGroup: (item: T) => string) {
@@ -36,48 +37,21 @@ export function groupBy<T>(array: T[], getGroup: (item: T) => string) {
   );
 }
 
-export function groupPeopleByTimeZone(people: Person[]): TimeZoneGroup[] {
+export function groupPeopleByTimeZone(people: People): TimeZoneGroup[] {
   const timeZoneGroups = groupBy(people, ({ timeZone }) => timeZone);
-
   return Object.entries(timeZoneGroups)
-    .map(([timeZone, people]: [string, Person[]]) => ({
+    .map(([timeZone, people]: [string, People]) => ({
+      timeZone,
       people,
-      ...getTimeZoneDetails(timeZone),
     }))
-    .sort((a, b) => a.offset - b.offset);
+    .sort((a, b) => getOffset(a.timeZone) - getOffset(b.timeZone));
 }
 
-export function getTimeZoneDetails(timeZone: string): TimeZone {
-  const [region, city] = timeZone.split('/');
-  const offset = getLocalOffset(timeZone);
-  return {
-    timeZone,
-    region,
-    city,
-    offset,
-    formattedOffset: formatUtcOffset(timeZone),
-  };
-}
+export function getDateTimeFromMinutes(minutes: number, timeZone?: string): DateTime {
+  const { hour, minute } = timeFromMinutes(minutes);
+  const dateTime = DateTime.local().set({ hour, minute });
 
-export function formatUtcOffset(timeZone: string): string {
-  const offset = getLocalOffset(timeZone);
-  const hours = offset / MINUTES_IN_HOUR;
-  const sign = hours < 0 ? '' : '+';
-  return `(${sign}${hours})`;
-}
-
-export function formatTime(time: number, timeZone?: string): string {
-  const { hour, minute } = timeFromMinutes(time);
-
-  const date = DateTime.local().set({ hour, minute });
-  if (timeZone) {
-    return date.setZone(timeZone).toFormat('T');
-  }
-  return date.toFormat('T');
-}
-
-export function getFormattedDate(daysOffset = 0): string {
-  return DateTime.now().plus({ days: daysOffset }).toFormat('d LLL');
+  return timeZone ? dateTime.setZone(timeZone) : dateTime;
 }
 
 export function timeFromMinutes(minutes: number) {
@@ -88,17 +62,17 @@ export function timeFromMinutes(minutes: number) {
 }
 
 export function withinWorkHours(selectedDateTime: DateTime, timeZone: string): boolean {
-  const date = selectedDateTime
-    .setZone(timeZone)
-    .set({ minute: 0, second: 0, millisecond: 0 });
+  const workDay = selectedDateTime.setZone(timeZone);
 
-  const workTime = Interval.fromDateTimes(
-    date.set({ hour: WORKDAY_START_HOUR }),
-    date.set({ hour: WORKDAY_END_HOUR }),
+  const workingHours = Interval.fromDateTimes(
+    workDay.set({ hour: WORKDAY_START_HOUR }),
+    workDay.set({ hour: WORKDAY_END_HOUR }),
   );
 
-  return workTime.contains(selectedDateTime);
+  return workingHours.contains(selectedDateTime);
 }
 
-// handy func for later
-// workRange.engulfs(selectedRange)
+export function formatTime(minutes: number, timeZone?: string): string {
+  const dateTime = getDateTimeFromMinutes(minutes, timeZone);
+  return dateTime.toFormat('T');
+}

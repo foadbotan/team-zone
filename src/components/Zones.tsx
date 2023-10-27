@@ -1,17 +1,19 @@
 import { MINUTES_IN_DAY } from '@/lib/constants';
-import { Person } from '@/lib/types';
-import { cn, groupPeopleByTimeZone, timeFromMinutes, withinWorkHours } from '@/lib/utils';
-import { DateTime } from 'luxon';
+import { People, TimeZoneGroup } from '@/lib/types';
+import {
+  cn,
+  getDateTimeFromMinutes,
+  groupPeopleByTimeZone,
+  withinWorkHours,
+} from '@/lib/utils';
 import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { DayProgressBar } from './DayProgressBar';
 import { Slider } from './Slider';
 
-export function Zones({ people }: { people: Person[] }) {
+export function Zones({ people }: { people: People }) {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);
-  const { hour, minute } = timeFromMinutes(selectedTime);
-  const selectedDateTime = DateTime.fromObject({ hour, minute });
-  const timeZoneGroups = groupPeopleByTimeZone(people);
+  const zones = groupPeopleByTimeZone(people);
 
   return (
     <section className="space-y-2">
@@ -20,14 +22,8 @@ export function Zones({ people }: { people: Person[] }) {
       </h2>
       <div className="relative -mx-8 select-none space-y-6 border border-neutral-300 bg-white p-6 sm:mx-0 sm:rounded-xl sm:shadow-md">
         <Slider selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
-        {timeZoneGroups.map(({ timeZone, people, city }) => (
-          <Zone
-            key={timeZone}
-            timeZone={timeZone}
-            people={people}
-            city={city}
-            selectedDateTime={selectedDateTime}
-          />
+        {zones.map((zone) => (
+          <Zone key={zone.timeZone} zone={zone} selectedTime={selectedTime} />
         ))}
       </div>
     </section>
@@ -35,15 +31,16 @@ export function Zones({ people }: { people: Person[] }) {
 }
 
 type ZoneProps = {
-  timeZone: string;
-  people: Person[];
-  city: string;
-  selectedDateTime: DateTime;
+  zone: TimeZoneGroup;
+  selectedTime: number;
 };
 
-function Zone({ timeZone, people, city, selectedDateTime }: ZoneProps) {
-  const canWork = withinWorkHours(selectedDateTime, timeZone);
+function Zone({ zone, selectedTime }: ZoneProps) {
+  const { timeZone, people } = zone;
 
+  const selectedDateTime = getDateTimeFromMinutes(selectedTime);
+  const canWork = withinWorkHours(selectedDateTime, timeZone);
+  const city = timeZone.split('/')[1];
   return (
     <div key={timeZone}>
       <div className="mb-2 flex items-end justify-between">
@@ -61,7 +58,7 @@ function Zone({ timeZone, people, city, selectedDateTime }: ZoneProps) {
           ))}
         </div>
       </div>
-      <DayProgressBar timeZone={timeZone} selectedDateTime={selectedDateTime} />
+      <DayProgressBar timeZone={timeZone} selectedTime={selectedTime} />
     </div>
   );
 }

@@ -6,14 +6,7 @@ export type Person = {
 
 export type People = Person[];
 
-export type TimeZone = {
+export type TimeZoneGroup = {
   timeZone: string;
-  region: string;
-  city: string;
-  offset: number;
-  formattedOffset: string;
-};
-
-export type TimeZoneGroup = TimeZone & {
   people: People;
 };
