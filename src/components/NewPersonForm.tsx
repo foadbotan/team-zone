@@ -49,7 +49,7 @@ export function NewPersonForm({ addPerson }: Props) {
           id="name"
           name="name"
           className="rounded-sm border border-neutral-300 px-3 py-1.5 placeholder:text-neutral-500"
-          placeholder="John Doe"
+          placeholder="John"
           required
           minLength={1}
           maxLength={50}
