@@ -18,7 +18,7 @@ export function Zones({ people }: { people: Person[] }) {
       <h2 className="text-center text-2xl font-medium tracking-tight text-neutral-900">
         Zones
       </h2>
-      <div className="relative -mx-8 select-none space-y-6 border bg-white p-6 sm:mx-0 sm:rounded-xl sm:shadow-md">
+      <div className="relative -mx-8 select-none space-y-6 border border-neutral-300 bg-white p-6 sm:mx-0 sm:rounded-xl sm:shadow-md">
         <Slider selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
         {timeZoneGroups.map(({ timeZone, people, city }) => (
           <Zone

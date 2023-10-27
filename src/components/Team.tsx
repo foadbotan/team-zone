@@ -38,7 +38,7 @@ export function Team({ people, setPeople }: Props) {
         Team
       </h2>
 
-      <div className="-mx-8 flex flex-col items-center space-y-8 border bg-white p-6 sm:mx-auto sm:w-fit sm:rounded-xl sm:shadow-md">
+      <div className="-mx-8 flex flex-col items-center space-y-8 border border-neutral-300 bg-white p-6 sm:mx-auto sm:w-fit sm:rounded-xl sm:shadow-md">
         <ul className="flex flex-wrap justify-center gap-x-2 gap-y-4">
           {people.map((person) => (
             <li

@@ -39,7 +39,7 @@ export function NewPersonForm({ addPerson }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex min-w-full flex-col space-y-4 border-t pt-6 sm:min-w-[20rem]"
+      className="flex min-w-full flex-col space-y-4 border-t border-neutral-300 pt-6 sm:min-w-[20rem]"
     >
       <h3 className="text-xl font-medium text-gray-900">New team member</h3>
 
