@@ -1,6 +1,6 @@
 # Team Zones
 
-Team Zones is a free tool designed to simplify scheduling and enhance coordination for remote teams across different time zones. It's a perfect solution for global teams looking to improve their productivity and communication efficiency. The live application can be accessed at https://team-zone.vercel.app/.
+Team Zones is a free tool designed to simplify scheduling and enhance coordination for remote teams across different time zones. It's a perfect solution for global teams looking to improve their productivity and communication efficiency. The live application can be accessed at [Team Zones](https://team-zone.vercel.app/).
 
 ![Team Zones screen shot](./screen-shot.png)
 
@@ -14,7 +14,7 @@ Team Zones is a free tool designed to simplify scheduling and enhance coordinati
 
 ## Approach Taken
 
-The application was built using a component-based approach, leveraging the power of React and Next.js. The UI state is stored in the URL, allowing users to share a link to a specific timezone view without signing up or logging in. This is achieved using the useQueryState hook from the next-usequerystate package.
+The application was built using a component-based approach, leveraging the power of React and Next.js. The UI state is stored in the URL, allowing users to share a link to a specific timezone view without signing up or logging in. This is achieved using my custom `useUrl` hook, which replaces `useState` and stores the state in the URL. It also validates the data using Zod.
 
 ## Running Tests
 
