@@ -3,7 +3,7 @@ import { CheckIcon, SettingsIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { NewPersonForm } from './NewPersonForm';
-import { People, Person } from '@/lib/types';
+import { People, Person } from '@/types/people';
 
 type Props = {
   people: People;

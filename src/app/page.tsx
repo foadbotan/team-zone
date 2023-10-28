@@ -2,20 +2,20 @@
 
 import { Team } from '@/components/Team';
 import { Zones } from '@/components/Zones';
+import { useUrl } from '@/hooks/useUrl';
 import { initialPeople } from '@/lib/data';
-import { People } from '@/lib/types';
 import { PeopleSchema } from '@/lib/validation';
-import { useQueryState, parseAsJson } from 'next-usequerystate';
+import { People } from '@/types/people';
 
 function validatePeople(value: unknown): People {
   return PeopleSchema.parse(value);
 }
 
 export default function Home() {
-  const [people, setPeople] = useQueryState(
-    'people',
-    parseAsJson<People>(validatePeople).withDefault(initialPeople),
-  );
+  const [people, setPeople] = useUrl<People>('people', {
+    defaultValue: initialPeople,
+    validate: validatePeople,
+  });
   const selectedPeople = people.filter(({ isSelected }) => isSelected);
 
   return (

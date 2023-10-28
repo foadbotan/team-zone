@@ -1,4 +1,4 @@
-import { Person } from '@/lib/types';
+import {  Person } from '@/types/people';
 import { useState } from 'react';
 import Select from 'react-select';
 

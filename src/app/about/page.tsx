@@ -2,7 +2,7 @@
 
 export default function page() {
   return (
-    <main className="prose prose-stone lg:prose-xl container space-y-12 py-12">
+    <main className="container prose prose-stone space-y-12 py-12 lg:prose-xl">
       <button
         type="button"
         onClick={() => window.history.back()}
@@ -57,10 +57,9 @@ export default function page() {
           <strong>Luxon:</strong> A powerful library for working with dates and times in
           JavaScript.
         </li>
-
         <li>
-          <strong>useQueryState:</strong> An open-source Next.js hook that stores React
-          state in the URL for persistence and sharing.
+          <strong>useUrl:</strong> My custom Next.js hook that replaces useState and
+          stores React state in the URL for persistence and sharing.
         </li>
       </ul>
       <h2 id="contact">About the Creator</h2>

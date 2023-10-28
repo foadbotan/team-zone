@@ -5,8 +5,3 @@ export type Person = {
 };
 
 export type People = Person[];
-
-export type TimeZoneGroup = {
-  timeZone: string;
-  people: People;
-};

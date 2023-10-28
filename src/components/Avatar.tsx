@@ -1,5 +1,5 @@
-import { Person } from '@/lib/types';
 import { cn, getAvatarSVGUrl } from '@/lib/utils';
+import { Person } from '@/types/people';
 
 type Prop = {
   person: Person;

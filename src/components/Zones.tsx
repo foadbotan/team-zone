@@ -1,5 +1,4 @@
 import { MINUTES_IN_DAY } from '@/lib/constants';
-import { People, TimeZoneGroup } from '@/lib/types';
 import {
   cn,
   getDateTimeFromMinutes,
@@ -10,6 +9,8 @@ import { useState } from 'react';
 import { Avatar } from './Avatar';
 import { DayProgressBar } from './DayProgressBar';
 import { Slider } from './Slider';
+import { People } from '@/types/people';
+import { TimeZoneGroup } from '@/types/timeZones';
 
 export function Zones({ people }: { people: People }) {
   const [selectedTime, setSelectedTime] = useState(MINUTES_IN_DAY / 2);

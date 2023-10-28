@@ -1,4 +1,4 @@
-import { People } from './types';
+import { People } from '@/types/people';
 
 const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

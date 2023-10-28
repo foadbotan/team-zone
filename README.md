@@ -10,7 +10,7 @@ Team Zones is a free tool designed to simplify scheduling and enhance coordinati
 - Tailwind CSS: A utility-first CSS framework for rapidly building custom user interfaces.
 - Zod: A TypeScript-first schema declaration and validation library.
 - Luxon: A powerful library for working with dates and times in JavaScript.
-- useQueryState: An open-source Next.js hook that stores React state in the URL for persistence and sharing.
+- useUrl: My custom Next.js hook that replaces `useState` and stores the state in the URL. It also validates the data. This hook is used for storing React state in the URL for persistence and sharing.
 
 ## Approach Taken
 

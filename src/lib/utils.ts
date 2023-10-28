@@ -1,13 +1,9 @@
+import { People } from '@/types/people';
+import { TimeZoneGroup } from '@/types/timeZones';
 import { clsx, type ClassValue } from 'clsx';
 import { DateTime, Interval } from 'luxon';
 import { twMerge } from 'tailwind-merge';
-import {
-  MINUTES_IN_DAY,
-  MINUTES_IN_HOUR,
-  WORKDAY_END_HOUR,
-  WORKDAY_START_HOUR,
-} from './constants';
-import { People, TimeZoneGroup } from './types';
+import { MINUTES_IN_HOUR, WORKDAY_END_HOUR, WORKDAY_START_HOUR } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
