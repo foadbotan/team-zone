@@ -28,8 +28,3 @@ The application uses Jest and Testing Library for testing. To run the tests, fol
 ## Unsolved Problems
 
 Currently, there are no unsolved problems in the project. However, future enhancements could include the ability to persist team member data using a backend database and user authentication for personalized team management.
-
-## Routes
-
-- `/` Home page: Displays the main interface for managing and viewing team members and their respective time zones.
-- `/about` About page: Provides information about the Team Zones tool, its features, and the technology stack used to build it.
