@@ -35,7 +35,7 @@ export default function page() {
         <li>
           <strong>State Persistence:</strong> The UI state is stored in the URL, allowing
           you to share a link to a specific timezone view without the need for signing up
-          or logging in. Technology Stack
+          or logging in.
         </li>
       </ol>
       <h2>Technology Stack</h2>
@@ -69,6 +69,14 @@ export default function page() {
         <a href="https://github.com/foadbotan">GitHub</a>,{' '}
         <a href="https://www.linkedin.com/in/foadbotan">LinkedIn</a>, and{' '}
         <a href="https://twitter.com/FoadBotan">Twitter</a>.
+      </p>
+
+      <h2>Source Code</h2>
+      <p>
+        Team Zones is an open source project. You can find the source code{' '}
+        <a href="https://github.com/foadbotan/team-zone">here</a>. Any contributions are
+        welcome! If you have any questions or suggestions, please feel free to reach out
+        to me.
       </p>
     </main>
   );
