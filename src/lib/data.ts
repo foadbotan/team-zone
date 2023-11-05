@@ -1,6 +1,6 @@
 import { People } from '@/types/people';
 
-const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
 
 export const initialPeople: People = [
   { name: 'ME', timeZone: localTimeZone, isSelected: true },
