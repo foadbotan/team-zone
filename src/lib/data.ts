@@ -1,9 +1,9 @@
 import { People } from '@/types/people';
 
-const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
+// const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const initialPeople: People = [
-  { name: 'ME', timeZone: localTimeZone, isSelected: true },
+  // { name: 'ME', timeZone: localTimeZone, isSelected: true },
   { name: 'Joey', timeZone: 'Europe/London', isSelected: true },
   { name: 'Rachel', timeZone: 'Europe/Moscow', isSelected: true },
   { name: 'Monica', timeZone: 'America/Los_Angeles', isSelected: false },
