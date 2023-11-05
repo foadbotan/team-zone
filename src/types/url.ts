@@ -16,6 +16,7 @@ export type UrlWrite<T> = {
   searchParams: ReadonlyURLSearchParams;
   pathname: string;
   router: AppRouterInstance;
+  scroll?: boolean;
 };
 
 export type UrlRead<T> = {

@@ -43,6 +43,7 @@ function urlWrite<T>({
   searchParams,
   pathname,
   router,
+  scroll = false,
 }: UrlWrite<T>) {
   const params = new URLSearchParams(searchParams);
 
@@ -53,5 +54,5 @@ function urlWrite<T>({
   }
 
   const url = `${pathname}?${params.toString()}`;
-  router[history](url);
+  router[history](url, { scroll });
 }
